@@ -1,0 +1,30 @@
+{
+  "name": "cse-110-project-team-10",
+  "version": "1.0.0",
+  "description": "Fresh repository with main branch.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CSE110-Coblenz/cse-110-project-team-10.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "konva": "^10.0.8",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CSE110-Coblenz/cse-110-project-team-10/issues"
+  },
+  "homepage": "https://github.com/CSE110-Coblenz/cse-110-project-team-10#readme"
+}
