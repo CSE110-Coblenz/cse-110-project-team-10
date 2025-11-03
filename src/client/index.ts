@@ -1,4 +1,5 @@
 import { Game } from './gameplay/Game.ts';
+import { inputController } from './gameplay/Input.ts';
 
 console.log("Main index.ts loaded");
 
@@ -6,6 +7,5 @@ console.log("Main index.ts loaded");
 window.addEventListener('DOMContentLoaded', (event) => {
 	const myGame = new Game('game-container'); 
 
-	myGame.startShot({angle: 60, velocity: 20});
-
+	const myInputController = new inputController(myGame, 'shoot-button');
 });

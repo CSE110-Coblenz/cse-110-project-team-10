@@ -6,10 +6,12 @@ export class Game {
 	private currentShotParams: ShotParams | null = null; 
 	private shotStartTime: number | null = null; 
 	private renderer: Renderer;
-
+	private ballPosition: Position = { x: 0, y: 0 }; 
+	
 	constructor(containerId: string) { 
 		console.log("Game module initialized"); 
 		this.renderer = new Renderer(containerId); 
+		this.renderer.draw({ ball: this.ballPosition });
 	}
 
 	public startShot(params: ShotParams): void {
