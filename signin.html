@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Kinematics Basketball Game</title>
+        <style>
+            body {
+                background-color: #f0f0f0;
+                font-family: sans-serif;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            #start-screen {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(17, 16, 67, 0.85);
+            }
+
+            #start-screen button {
+                padding: 0.75rem 2rem;
+                font-size: 1rem;
+                border: 1px solid #333;
+                background: #ffffff;
+                cursor: pointer;
+            }
+
+            #start-screen.hidden {
+                display: none;
+            }
+
+            /* Start Screen UI */
+            #start-controls {
+                width: min(560px, 92vw);
+                background: #ffffff;
+                padding: 1.25rem, 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+                display: grid;
+                gap: 0.75rem;
+                text-align: left;
+            }
+
+            .start-title {
+                margin: 0 0 .25rem 0;
+                font-size: 1.75rem;
+                color: #111043;
+            }
+
+            .start-subtitle {
+                margin: 0 0 .5rem 0;
+                font-size: 1rem;
+                color: #444;
+                opacity: 0.9;
+            }
+
+            .field {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+            }
+
+            .field.row {
+                display: flex;
+                align-items: center;
+                gap: .5rem;
+            }
+
+            .field label {
+                font-size: .9rem;
+                color: #333;
+            }
+
+            .field input[type="text"],
+            .field select {
+                padding: 0.5rem 0.75rem;
+                font-size: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #fff;
+            }
+
+            #guest-play-button {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                border: 1px solid #333;
+                background: #111043;
+                color: #111043;
+                border-radius: 8px;
+                cursor: pointer;
+                width: 100%;
+                margin-top: .25rem;
+            }
+
+            #guest-play-button:hover {
+                filter: brightness(1.05);
+            }
+
+            .help-text {
+                font-size: .85rem;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="start-screen">
+            <div id="start-controls">
+            <h1 class="start-title">Kinematics Basketball</h1>
+            <p class="start-subtitle">Pick a name, then start as a Guest.</p>
+            <div class="field">
+                <label for="player-name">Player name</label>
+                <input id="player-name" type="text" placeholder="ex. Andrew" maxlength="16" autocomplete="off" />
+            </div>
+                <a href="game.html">
+                    <button id="guest-play-button">
+                        Sign in as guest
+                    </button>
+                </a>
+            </div>
+        </div>
+    <script type="module" src="/src/client/index.ts"></script>
+    </body>
+</html>
