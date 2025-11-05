@@ -1,6 +1,6 @@
 import { Position, ShotParams } from './types.ts'; 
 
-const gravity = 9.81 *1.5; 
+const gravity = 9.81 *1.5;
 
 
 // Calculates the (x, y) position of the ball at a specific time after launch.
