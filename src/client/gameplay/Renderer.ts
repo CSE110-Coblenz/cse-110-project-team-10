@@ -3,6 +3,7 @@ import { Position } from './types';
 
 export interface GameState {
 	ball: Position; 
+	trajectory: Position[]; 
 }
 
 const pixelsPerMeter = 30; 
@@ -11,6 +12,7 @@ export class Renderer {
 	private stage: Konva.Stage;
 	private layer: Konva.Layer;
 	private ball: Konva.Circle; 
+	private indicatorLine: Konva.Line; 
 
 	private sceneWidth = 800; 
 	private sceneHeight = 600; 
@@ -32,14 +34,30 @@ export class Renderer {
 			stroke: 'black', 
 			strokeWidth: 2,
 		});
+		this.indicatorLine = new Konva.Line({
+			dash: [10, 5],
+			stroke: 'red',
+			strokeWidth: 2,
+		});
 
+		this.layer.add(this.indicatorLine);
 		this.layer.add(this.ball);
 		this.layer.draw();
 	}
 
 	public draw(state: GameState): void {
+		const { ball, trajectory } = state;
 		this.ball.x(state.ball.x * pixelsPerMeter);
 		this.ball.y(this.sceneHeight - (state.ball.y * pixelsPerMeter));
+		
+
+		const flatPixelArray = trajectory.flatMap(pos => {
+			const px = pos.x * pixelsPerMeter;
+			const py = this.stage.height() - (pos.y * pixelsPerMeter);
+			return [px, py];
+		});
+		console.log("Rendering trajectory with points: ", flatPixelArray);
+		this.indicatorLine.points(flatPixelArray);
 		this.layer.batchDraw(); 
 	}
 }
