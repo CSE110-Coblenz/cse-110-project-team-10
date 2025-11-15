@@ -32,8 +32,8 @@ export class inputController {
 
 	private handleShootClick(): void { 
 		const shotParams = { 
-			angle: this.angleSlider.value,
-			velocity: this.velocitySlider.value
+			angle: parseFloat(this.angleSlider.value),
+			velocity: parseFloat(this.velocitySlider.value)
 		};
 		
 		this.game.startShot(shotParams); 
@@ -42,10 +42,14 @@ export class inputController {
 	private onAngleChange = (): void => {
 		const value = this.angleSlider.value;
 		this.angleValueSpan.textContent = `${value}°`;
+		console.log("Angle changed to: ", value);
+		this.game.updateTrajectoryPreview({angle: parseFloat(value), velocity: parseFloat(this.velocitySlider.value)});
 	}
 
 	private onVelocityChange = (): void => {
 		const value = this.velocitySlider.value;
 		this.velocityValueSpan.textContent = `${value} m/s`;
+		console.log("Velocity changed to: ", value);
+		this.game.updateTrajectoryPreview({angle: parseFloat(this.angleSlider.value), velocity: parseFloat(value)});
 	}
 }

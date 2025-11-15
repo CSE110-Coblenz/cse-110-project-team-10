@@ -16,3 +16,21 @@ export function calculatePositionAtTime(params: ShotParams, time: number): Posit
 
 	return { x, y }; 
 }
+
+export function calculateTrajectoryPoints(params: ShotParams) {
+	const pathPoints: Position[] = [];
+  const timeStep = 0.05; 
+  let time = 0;
+
+  while (true) {
+    const pos = calculatePositionAtTime(params, time);
+    if (pos.y < 0) {
+      break;
+    }
+    
+    pathPoints.push(pos);
+    time += timeStep;
+  }
+  console.log("Calculated trajectory points: ", pathPoints);
+  return pathPoints;
+}
