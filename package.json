@@ -16,11 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "konva": "^10.0.8",
-    "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^7.1.12"
   },
   "type": "commonjs",
   "bugs": {
