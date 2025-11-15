@@ -17,6 +17,7 @@ export function calculatePositionAtTime(params: ShotParams, time: number): Posit
 	return { x, y }; 
 }
 
+// Calculates an array of positions (x,y) representing the trajectory path.
 export function calculateTrajectoryPoints(params: ShotParams) {
 	const pathPoints: Position[] = [];
   const timeStep = 0.05; 
