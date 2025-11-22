@@ -14,8 +14,8 @@ export class Renderer {
 	private ball: Konva.Circle; 
 	private indicatorLine: Konva.Line; 
 
-	private sceneWidth = 800; 
-	private sceneHeight = 600; 
+	private sceneWidth = 1450; 
+	private sceneHeight = 450; 
 
 	constructor(containerId: string) {
 		this.stage = new Konva.Stage({
