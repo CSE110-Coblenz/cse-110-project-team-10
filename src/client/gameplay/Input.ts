@@ -2,54 +2,73 @@ import { Game } from './Game';
 
 export class inputController {
 	private game: Game; 
-	private angleSlider: HTMLInputElement;
-  	private angleValueSpan: HTMLElement;
-  	private velocitySlider: HTMLInputElement;
- 	private velocityValueSpan: HTMLElement;
+	private angleInput: HTMLInputElement | null;
+  	private velocityInput: HTMLInputElement | null;
+	private eqV1: HTMLElement | null;
+	private eqA1: HTMLElement | null;
+	private eqV2: HTMLElement | null;
+	private eqA2: HTMLElement | null;
+	private eqG: HTMLElement | null;
+	private readonly GRAVITY_CONST = "15";
 
 	constructor(game: Game, shootButtonId: string) {
 		this.game = game; 
 
 		const shootButton = document.getElementById(shootButtonId); 
-		this.angleSlider = document.getElementById('angle-slider') as HTMLInputElement;
-    		this.angleValueSpan = document.getElementById('angle-value') as HTMLElement;
-	    	this.velocitySlider = document.getElementById('velocity-slider') as HTMLInputElement;
-	    	this.velocityValueSpan = document.getElementById('velocity-value') as HTMLInputElement;
-		if (shootButton && this.angleSlider && this.velocitySlider && this.angleValueSpan && this.velocityValueSpan) {
-			shootButton.addEventListener('click', () => {
-				this.handleShootClick(); 
-			});
-			
-			this.angleSlider.addEventListener('input', this.onAngleChange);
-			this.velocitySlider.addEventListener('input', this.onVelocityChange);
-			
-			this.onAngleChange();
-			this.onVelocityChange();
-		} else {
-			console.error('no button with ID #${shootButtonId}');
-		}
-	}
+		this.angleInput = document.getElementById('input-angle') as HTMLInputElement;
+	    this.velocityInput = document.getElementById('input-velocity') as HTMLInputElement;
+		this.eqV1 = document.getElementById('eq-v-1');
+		this.eqA1 = document.getElementById('eq-a-1');
+		this.eqV2 = document.getElementById('eq-v-2');
+		this.eqA2 = document.getElementById('eq-a-2');
+		this.eqG = document.getElementById('eq-g');
+		if (shootButton && this.angleInput && this.velocityInput && this.eqV1 && this.eqA1 && this.eqV2 && this.eqA2 && this.eqG) {
+			shootButton.addEventListener('click', this.handleShootClick);
 
-	private handleShootClick(): void { 
-		const shotParams = { 
-			angle: parseFloat(this.angleSlider.value),
-			velocity: parseFloat(this.velocitySlider.value)
-		};
+			// Add listeners to the new text boxes
+			this.angleInput.addEventListener('input', this.onParamChange);
+			this.velocityInput.addEventListener('input', this.onParamChange);
+			
+			this.updateTrajectory();
+			this.updateEquationDisplay(); 
+			} else {
+				console.error(`InputController: Could not find all required elements (button, inputs, or equation spans). Check your IDs.`);
+			}
+		}
+
+	private handleShootClick = (): void => {
+		const angle = this.angleInput!.value ? parseFloat(this.angleInput!.value) : 0;
+    	const velocity = this.velocityInput!.value ? parseFloat(this.velocityInput!.value) : 0;
+
+    	const shotParams = { angle, velocity };
 		
 		this.game.startShot(shotParams); 
 	}
 
-	private onAngleChange = (): void => {
-		const value = this.angleSlider.value;
-		this.angleValueSpan.textContent = `${value}°`;
-		console.log("Angle changed to: ", value);
-		this.game.updateTrajectoryPreview({angle: parseFloat(value), velocity: parseFloat(this.velocitySlider.value)});
+	private onParamChange = (): void => {
+		this.updateTrajectory();
+		this.updateEquationDisplay();
 	}
+	private updateTrajectory = (): void => {
+		if (this.angleInput && this.velocityInput) {
+			const angle = this.angleInput.value ? parseFloat(this.angleInput.value) : 0;
+			const velocity = this.velocityInput.value ? parseFloat(this.velocityInput.value) : 0;
+			const params = { angle, velocity };
+			this.game.updateTrajectoryPreview(params);
+		}
+	}
+	private updateEquationDisplay = (): void => {
+		if (this.angleInput && this.velocityInput) {
 
-	private onVelocityChange = (): void => {
-		const value = this.velocitySlider.value;
-		this.velocityValueSpan.textContent = `${value} m/s`;
-		console.log("Velocity changed to: ", value);
-		this.game.updateTrajectoryPreview({angle: parseFloat(this.angleSlider.value), velocity: parseFloat(value)});
+		const angle = this.angleInput.value || 'θ';
+		const velocity = this.velocityInput.value || 'v';
+
+		// Update all the text contents
+		this.eqV1!.textContent = velocity;
+		this.eqV2!.textContent = velocity;
+		this.eqA1!.textContent = angle + "°";
+		this.eqA2!.textContent = angle + "°";
+		this.eqG!.textContent = this.GRAVITY_CONST;
+		}
 	}
 }
