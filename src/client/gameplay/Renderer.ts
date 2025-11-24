@@ -1,7 +1,7 @@
 import Konva from 'konva'; 
 import { Position } from './types';
-import { HOOP_POSITION_M } from './constants';
-import { BACKBOARD_SIZE_M, RIM_LENGTH_M, PIXELS_PER_METER, BALL_RADIUS_M} from '../gameplay/constants';
+import { HOOP_POSITION_M } from './Constants';
+import { BACKBOARD_SIZE_M, RIM_LENGTH_M, PIXELS_PER_METER, BALL_RADIUS_M} from './Constants';
 
 export interface GameState {
 	ball: Position; 
