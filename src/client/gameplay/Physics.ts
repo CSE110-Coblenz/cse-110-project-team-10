@@ -1,5 +1,5 @@
 import { Position, ShotParams } from './types.ts'; 
-import { HOOP_POSITION_M, RIM_LENGTH_M, BALL_RADIUS_M, BACKBOARD_SIZE_M } from './constants.ts';
+import { HOOP_POSITION_M, RIM_LENGTH_M, BALL_RADIUS_M, BACKBOARD_SIZE_M } from './Constants.ts';
 
 const gravity = 9.81 *1.5;
 
