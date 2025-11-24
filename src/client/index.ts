@@ -1,5 +1,6 @@
 import { Game } from './gameplay/Game.ts';
 import { inputController } from './gameplay/Input.ts';
+import { setupGuestPlayButton } from './startScreen.ts';
 
 console.log('Main index.ts loaded');
 
@@ -10,15 +11,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	const startScreen = document.getElementById('start-screen');
 	const guestButton = document.getElementById('guest-play-button');
+	const isGuestButtonAvailable = setupGuestPlayButton(startScreen, guestButton);
 
-	if (!guestButton) {
+	if (!isGuestButtonAvailable) {
 		console.warn('Missing guest sign-in button; start screen will remain visible.');
 		return;
 	}
-
-	guestButton.addEventListener('click', () => {
-		if (startScreen) {
-			startScreen.classList.add('hidden');
-		}
-	});
 });

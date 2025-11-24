@@ -4,7 +4,7 @@
   "description": "Fresh repository with main branch.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "dev": "vite"
   },
   "repository": {
@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "vitest": "^4.0.13"
   },
   "type": "commonjs",
   "bugs": {
