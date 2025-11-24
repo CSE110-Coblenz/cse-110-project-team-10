@@ -1,5 +1,5 @@
 import { ShotParams, Position } from './types.ts';
-import { calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
+import { calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
 
 export class Game { 
@@ -17,7 +17,6 @@ export class Game {
 	public startShot(params: ShotParams): void {
 		this.currentShotParams = params; 
 		this.shotStartTime = Date.now(); 
-		console.log("Starting shot with: ", params);
 		this.gameLoop();
 	}
 
@@ -25,7 +24,6 @@ export class Game {
 	public updateTrajectoryPreview(params: ShotParams) {
 		const newState: GameState = { ball: this.ballPosition, trajectory: calculateTrajectoryPoints(params)};
 		this.renderer.draw(newState);
-		console.log("Updated trajectory preview with: ", params);
 	}
 	private gameLoop() {
 		if (!this.currentShotParams || !this.shotStartTime) {
@@ -34,10 +32,14 @@ export class Game {
 
 		const currentTime = Date.now(); 
 		const timeInSeconds = (currentTime - this.shotStartTime) / 1000;
-		const ballPosition = calculatePositionAtTime(this.currentShotParams, timeInSeconds); 
+		this.ballPosition = calculatePositionAtTime(this.currentShotParams, timeInSeconds); 
 		const trajectoryPreview = calculateTrajectoryPoints(this.currentShotParams);
-		this.renderer.draw({ ball: ballPosition, trajectory: trajectoryPreview });	
-		if (ballPosition.y < 0) {
+		this.renderer.draw({ ball: this.ballPosition, trajectory: trajectoryPreview });	
+		if (calculateCollision(this.ballPosition)) {
+			console.log("Collision Detected with Backboard!"); 
+			this.currentShotParams = null;
+			this.shotStartTime = null; 
+		} else if (this.ballPosition.y < 0) {
 			console.log("Shot Finished"); 
 			this.currentShotParams = null;
 			this.shotStartTime = null; 

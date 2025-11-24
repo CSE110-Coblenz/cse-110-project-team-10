@@ -1,4 +1,5 @@
 import { Position, ShotParams } from './types.ts'; 
+import { HOOP_POSITION_M, RIM_LENGTH_M, BALL_RADIUS_M, BACKBOARD_SIZE_M } from './constants.ts';
 
 const gravity = 9.81 *1.5;
 
@@ -32,6 +33,25 @@ export function calculateTrajectoryPoints(params: ShotParams) {
     pathPoints.push(pos);
     time += timeStep;
   }
-  console.log("Calculated trajectory points: ", pathPoints);
   return pathPoints;
+}
+
+export function calculateCollision(ballPos: Position): boolean {
+
+  const ballLeft = ballPos.x - BALL_RADIUS_M;
+  const ballRight = ballPos.x + BALL_RADIUS_M;
+  const ballTop = ballPos.y + BALL_RADIUS_M;
+  const ballBottom = ballPos.y - BALL_RADIUS_M;
+
+
+  const boardLeft = HOOP_POSITION_M.x;
+  const boardRight = HOOP_POSITION_M.x + BACKBOARD_SIZE_M.width;
+  
+  const boardTop = HOOP_POSITION_M.y + (BACKBOARD_SIZE_M.height / 2);
+  const boardBottom = HOOP_POSITION_M.y - (BACKBOARD_SIZE_M.height / 2);
+
+  const isOverlappingX = ballRight > boardLeft && ballLeft < boardRight;
+  const isOverlappingY = ballTop > boardBottom && ballBottom < boardTop;
+  
+  return isOverlappingX && isOverlappingY;
 }
