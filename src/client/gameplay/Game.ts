@@ -1,5 +1,5 @@
 import { ShotParams, Position } from './types.ts';
-import { calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
+import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
 
 export class Game { 
@@ -7,6 +7,7 @@ export class Game {
 	private shotStartTime: number | null = null; 
 	private renderer: Renderer;
 	private ballPosition: Position = { x: 0, y: 0 }; 
+	private score: number = 0;
 	
 	constructor(containerId: string) { 
 		console.log("Game module initialized"); 
@@ -32,10 +33,15 @@ export class Game {
 
 		const currentTime = Date.now(); 
 		const timeInSeconds = (currentTime - this.shotStartTime) / 1000;
-		this.ballPosition = calculatePositionAtTime(this.currentShotParams, timeInSeconds); 
+		this.ballPosition = calculatePositionAtTime(this.currentShotParams, timeInSeconds);  
 		const trajectoryPreview = calculateTrajectoryPoints(this.currentShotParams);
 		this.renderer.draw({ ball: this.ballPosition, trajectory: trajectoryPreview });	
-		if (calculateCollision(this.ballPosition)) {
+		if (calculateBasketMade(this.ballPosition)) {
+			console.log("Basket Made!"); 
+			this.score += 1;
+			this.currentShotParams = null;
+			this.shotStartTime = null; 
+		} else if (calculateCollision(this.ballPosition)) {
 			console.log("Collision Detected with Backboard!"); 
 			this.currentShotParams = null;
 			this.shotStartTime = null; 
