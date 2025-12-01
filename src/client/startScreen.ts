@@ -10,20 +10,22 @@ export function setupGuestPlayButton(startScreen: MaybeElement, guestButton: May
 		return false;
 	}
 
-	const input = document.getElementById("player-name") as HTMLInputElement;
+	
 	guestButton.addEventListener('click', () => {
+
+		const input = document.getElementById("player-name") as HTMLInputElement;
+		const name = input.value.trim();
+		const finalName = name || "Guest";
+
+		getOrCreateUser(finalName);
+
+		localStorage.setItem("currentUser", finalName);
+
 		if (startScreen) {
-			const name = input.value.trim();
-
-			const finalName = name || "Guest";
-
-			getOrCreateUser(finalName);
-
-			localStorage.setItem("currentUser", finalName);
-
-			window.location.href = "home.html";
 			startScreen.classList.add('hidden');
 		}
+
+		window.location.href = "home.html";
 	});
 
 	return true;
