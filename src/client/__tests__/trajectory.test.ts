@@ -4,6 +4,10 @@ import { calculatePositionAtTime, calculateTrajectoryPoints } from '../gameplay/
 const sampleParams = { angle: 50, velocity: 12 };
 const timeStep = 0.05;
 
+/*
+ * These tests are to monitor and ensure that the proper trajectory is
+ * returned in the game, for the user.
+ */
 describe('calculateTrajectoryPoints', () => {
 	it('returns positions that match individual physics samples', () => {
 		const trajectory = calculateTrajectoryPoints(sampleParams);
