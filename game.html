@@ -109,6 +109,67 @@
       #shoot-button:hover {
         background-color: #0056b3;
       }
+      .modal-overlay {
+        /* This is the dark background */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed; /* Sits on top of everything */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 10;
+      }
+      .modal {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+      }
+      .modal h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      .modal p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.5;
+      }
+      .modal .stats {
+        font-weight: bold;
+        color: #d9534f;
+      }
+      #play-again-button, #stage-selection-button {
+        /* This is the button INSIDE the modal */
+        display: block;
+        width: 100%;
+        padding: 12px 20px;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #28a745; /* Green */
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      #end-screen-buttons:hover, #stage-selection-button:hover {
+        background-color: #218838;
+      }
+      .modal div {
+        display: inline-flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .hidden {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -133,6 +194,10 @@
     <div id="game-container"></div>
     <div id="controls">
         <div class="control-group">
+          <label>Shots Taken:</label>
+          <span id="shots-taken-value" class="equation-value">0</span>
+        </div>
+        <div class="control-group">
           <label for="input-angle">Angle (&theta;):</label>
           <input type="number" id="input-angle" value="60" min="0" max="90" step="1">
           <span>degrees</span>
@@ -145,5 +210,22 @@
         <button id="shoot-button">Shoot</button>
     </div>
     <script type="module" src="/src/client/index.ts"></script>
+    <div id="win-screen" class="modal-overlay hidden">
+      <div class="modal">
+        <h2>You Scored!</h2>
+        <p>
+          It took you <span id="shot-count-span" class="stats">0</span> shots.
+        </p>
+        <p>
+          Successful Shot:
+          <span id="final-angle-span" class="stats">0</span>° at
+          <span id="final-velocity-span" class="stats">0</span> m/s
+        </p>
+        <div>
+           <button id="play-again-button">Play Again</button>
+           <button id="stage-selection-button">Stage Selection</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

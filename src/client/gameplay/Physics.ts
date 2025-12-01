@@ -55,20 +55,24 @@ export function calculateCollision(ballPos: Position): boolean {
   
   return isOverlappingX && isOverlappingY;
 }
-export function calculateBasketMade(ballPos: Position): boolean {
 
-  const ballLeft = ballPos.x - BALL_RADIUS_M;
-  const ballRight = ballPos.x + BALL_RADIUS_M;
-  const ballTop = ballPos.y + BALL_RADIUS_M;
-  const ballBottom = ballPos.y - BALL_RADIUS_M;
+export function calculateBasketMade(ballPos: Position, ballPrevPosition: Position): boolean {
+  if (ballPrevPosition.y > ballPos.y) {
+    const ballLeft = ballPos.x - BALL_RADIUS_M;
+      const ballRight = ballPos.x + BALL_RADIUS_M;
+      const ballTop = ballPos.y + BALL_RADIUS_M;
+      const ballBottom = ballPos.y - BALL_RADIUS_M;
 
-  const rimTop = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) + (RIM_THICKNESS_PX / 2);
-  const rimBottom = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) - (RIM_THICKNESS_PX / 2);
-  const rimLeft = HOOP_POSITION_M.x - RIM_LENGTH_M;
-  const rimRight = HOOP_POSITION_M.x;
+      const rimTop = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) + (RIM_THICKNESS_PX / 2);
+      const rimBottom = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) - (RIM_THICKNESS_PX / 2);
+      const rimLeft = HOOP_POSITION_M.x - RIM_LENGTH_M;
+      const rimRight = HOOP_POSITION_M.x;
 
-  const isWithinRimX = ballLeft > rimLeft && ballRight < rimRight;
-  const isBelowRimY = ballTop < rimTop && ballBottom > rimBottom;
+      const isWithinRimX = ballLeft > rimLeft && ballRight < rimRight;
+      const isBelowRimY = ballTop < rimTop && ballBottom > rimBottom;
 
-  return isWithinRimX && isBelowRimY;
+      return isWithinRimX && isBelowRimY;
+  }
+  return false;
 }
+
