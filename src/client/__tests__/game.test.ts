@@ -33,7 +33,7 @@ const mockedTrajectory = vi.mocked(calculateTrajectoryPoints);
 const mockedBasket = vi.mocked(calculateBasketMade);
 const mockedCollision = vi.mocked(calculateCollision);
 
-const readScore = (game: Game) => (game as unknown as { score: number }).score;
+const readShotsTaken = (game: Game) => (game as unknown as { shotsTaken: number }).shotsTaken;
 const rafMocks = vi.hoisted(() => ({
 	requestAnimationFrame: vi.fn(),
 }));
@@ -53,7 +53,7 @@ describe('Game scoring', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('increments the score when the basket is made', () => {
+	it('increments the amount of shots taken when shot is placed', () => {
 		const dateSpy = vi.spyOn(Date, 'now');
 		dateSpy.mockReturnValueOnce(0).mockReturnValue(1000);
 		mockedPosition.mockReturnValue({ x: 1, y: 3 });
@@ -62,9 +62,9 @@ describe('Game scoring', () => {
 		mockedCollision.mockReturnValue(false);
 
 		const game = new Game('canvas');
-		game.startShot({ angle: 45, velocity: 15 });
+		game.startShot({ angle: 73, velocity: 28 });
 
-		expect(readScore(game)).toBe(1);
+		expect(readShotsTaken(game)).toBe(1);
 		expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 });
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
@@ -81,7 +81,7 @@ describe('Game scoring', () => {
 		const game = new Game('canvas');
 		game.startShot({ angle: 30, velocity: 10 });
 
-		expect(readScore(game)).toBe(0);
+		expect(readShotsTaken(game)).toBe(1);
 		expect(mockedBasket).toHaveBeenCalled();
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
