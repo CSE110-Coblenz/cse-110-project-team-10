@@ -33,7 +33,9 @@ const mockedTrajectory = vi.mocked(calculateTrajectoryPoints);
 const mockedBasket = vi.mocked(calculateBasketMade);
 const mockedCollision = vi.mocked(calculateCollision);
 
-const readShotsTaken = (game: Game) => (game as unknown as { shotsTaken: number }).shotsTaken;
+function readScore(game: Game): number {
+	return (game as unknown as { score: number }).score;
+}
 const rafMocks = vi.hoisted(() => ({
 	requestAnimationFrame: vi.fn(),
 }));
