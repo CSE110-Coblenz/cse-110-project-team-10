@@ -65,7 +65,7 @@ describe('Game scoring', () => {
 		game.startShot({ angle: 73, velocity: 28 });
 
 		expect(readShotsTaken(game)).toBe(1);
-		expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 });
+		expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 });
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
@@ -82,6 +82,7 @@ describe('Game scoring', () => {
 		game.startShot({ angle: 30, velocity: 10 });
 
 		expect(readShotsTaken(game)).toBe(1);
+		expect(mockedBasket).toHaveBeenCalledWith({ x: 0, y: -1 }, { x: 0, y: 0 });
 		expect(mockedBasket).toHaveBeenCalled();
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
