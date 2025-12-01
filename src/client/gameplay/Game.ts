@@ -1,6 +1,7 @@
 import { ShotParams, Position } from './types.ts';
 import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
+import { inputController } from './Input';
 
 export class Game { 
 	private currentShotParams: ShotParams | null = null; 
@@ -8,6 +9,11 @@ export class Game {
 	private renderer: Renderer;
 	private ballPosition: Position = { x: 0, y: 0 }; 
 	private score: number = 0;
+	private ballPrevPosition: Position = { x: 0, y: 0 };
+	private shotsTaken : number = 0;
+	private inputController: inputController | null = null;
+	private isShooting: boolean = false;
+	private isGameOver: boolean = false;
 	
 	constructor(containerId: string) { 
 		console.log("Game module initialized"); 
@@ -18,14 +24,36 @@ export class Game {
 	public startShot(params: ShotParams): void {
 		this.currentShotParams = params; 
 		this.shotStartTime = Date.now(); 
+		this.shotsTaken++;
+		this.inputController?.updateShotsDisplay(this.shotsTaken);
 		this.gameLoop();
 	}
+
+	public setInputController(controller: inputController): void {
+        this.inputController = controller;
+    }
 
 
 	public updateTrajectoryPreview(params: ShotParams) {
 		const newState: GameState = { ball: this.ballPosition, trajectory: calculateTrajectoryPoints(params)};
 		this.renderer.draw(newState);
 	}
+
+	public resetGame(): void {
+        console.log("Resetting game...");
+        this.isGameOver = false;
+        this.shotsTaken = 0;
+        this.inputController?.hideWinScreen();
+        this.inputController?.updateShotsDisplay(this.shotsTaken);
+        this.resetShot();
+    }
+	private resetShot(): void {
+        this.isShooting = false;
+        this.ballPosition = { x: 0, y: 0 };
+        // Redraw ball at start, clear trajectory
+        this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
+    }
+
 	private gameLoop() {
 		if (!this.currentShotParams || !this.shotStartTime) {
 			return;
@@ -33,20 +61,28 @@ export class Game {
 
 		const currentTime = Date.now(); 
 		const timeInSeconds = (currentTime - this.shotStartTime) / 1000;
+		this.ballPrevPosition = this.ballPosition;
 		this.ballPosition = calculatePositionAtTime(this.currentShotParams, timeInSeconds);  
 		const trajectoryPreview = calculateTrajectoryPoints(this.currentShotParams);
 		this.renderer.draw({ ball: this.ballPosition, trajectory: trajectoryPreview });	
-		if (calculateBasketMade(this.ballPosition)) {
+		
+		
+		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition)) {
 			console.log("Basket Made!"); 
-			this.score += 1;
-			this.currentShotParams = null;
+			this.score++;
 			this.shotStartTime = null; 
+			this.isGameOver = true; 
+			this.isShooting = false; 
+			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
+            return;
 		} else if (calculateCollision(this.ballPosition)) {
 			console.log("Collision Detected with Backboard!"); 
+			this.score--; 
 			this.currentShotParams = null;
 			this.shotStartTime = null; 
 		} else if (this.ballPosition.y < 0) {
 			console.log("Shot Finished"); 
+			this.score--; 
 			this.currentShotParams = null;
 			this.shotStartTime = null; 
 		} else { 
