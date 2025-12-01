@@ -53,37 +53,54 @@ describe('Game scoring', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('increments the score when the basket is made', () => {
-		const dateSpy = vi.spyOn(Date, 'now');
-		dateSpy.mockReturnValueOnce(0).mockReturnValue(1000);
-		mockedPosition.mockReturnValue({ x: 1, y: 3 });
-		mockedTrajectory.mockReturnValue([]);
-		mockedBasket.mockReturnValue(true);
+		it('increments the score when the basket is made', () => {
+			const dateSpy = vi.spyOn(Date, 'now');
+			dateSpy.mockReturnValueOnce(0).mockReturnValue(1000);
+			mockedPosition.mockReturnValue({ x: 1, y: 3 });
+			mockedTrajectory.mockReturnValue([]);
+			mockedBasket.mockReturnValue(true);
 		mockedCollision.mockReturnValue(false);
 
 		const game = new Game('canvas');
 		game.startShot({ angle: 45, velocity: 15 });
 
-		expect(readScore(game)).toBe(1);
-		expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 });
+			expect(readScore(game)).toBe(1);
+			expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 });
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
 
-	it('does not increment the score when the shot misses', () => {
-		const dateSpy = vi.spyOn(Date, 'now');
-		dateSpy.mockReturnValueOnce(0).mockReturnValue(500);
-		mockedPosition.mockReturnValue({ x: 0, y: -1 });
-		mockedTrajectory.mockReturnValue([]);
-		mockedBasket.mockReturnValue(false);
-		mockedCollision.mockReturnValue(false);
+		it('decrements the score when the shot misses the basket', () => {
+			const dateSpy = vi.spyOn(Date, 'now');
+			dateSpy.mockReturnValueOnce(0).mockReturnValue(500);
+			mockedPosition.mockReturnValue({ x: 0, y: -1 });
+			mockedTrajectory.mockReturnValue([]);
+			mockedBasket.mockReturnValue(false);
+			mockedCollision.mockReturnValue(false);
 
-		const game = new Game('canvas');
-		game.startShot({ angle: 30, velocity: 10 });
+			const game = new Game('canvas');
+			game.startShot({ angle: 30, velocity: 10 });
 
-		expect(readScore(game)).toBe(0);
-		expect(mockedBasket).toHaveBeenCalled();
+			expect(readScore(game)).toBe(-1);
+			expect(mockedBasket).toHaveBeenCalled();
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
-});
+
+		it('decrements the score when the shot collides with the backboard', () => {
+			const dateSpy = vi.spyOn(Date, 'now');
+			dateSpy.mockReturnValueOnce(0).mockReturnValue(750);
+			mockedPosition.mockReturnValue({ x: 5, y: 5 });
+			mockedTrajectory.mockReturnValue([]);
+			mockedBasket.mockReturnValue(false);
+			mockedCollision.mockReturnValue(true);
+
+			const game = new Game('canvas');
+			game.startShot({ angle: 40, velocity: 12 });
+
+			expect(readScore(game)).toBe(-1);
+			expect(mockedCollision).toHaveBeenCalledWith({ x: 5, y: 5 });
+			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
+			dateSpy.mockRestore();
+		});
+	});
