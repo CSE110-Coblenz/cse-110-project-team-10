@@ -6,12 +6,25 @@ console.log('Main index.ts loaded');
 
 // Make sure the HTML doc is loaded before running the game
 window.addEventListener('DOMContentLoaded', () => {
-	const game = new Game('game-container');
+    if (document.getElementById("start-screen")) {
+        const startScreen = document.getElementById('start-screen');
+        const guestButton = document.getElementById('guest-play-button');
 
-    const myInputController = new inputController(game, 'shoot-button');
+        setupGuestPlayButton(startScreen, guestButton);
+        return;
+    }
 
-    game.setInputController(myInputController);
+    if(document.getElementById("game-container")){
+	    const game = new Game('game-container');
+
+        const myInputController = new inputController(game, 'shoot-button');
+
+        game.setInputController(myInputController);
+
+        return
+    }   
     
+    /*
     const startScreen = document.getElementById('start-screen');
     const guestButton = document.getElementById('guest-play-button');
     const isGuestButtonAvailable = setupGuestPlayButton(startScreen, guestButton);
@@ -20,4 +33,5 @@ window.addEventListener('DOMContentLoaded', () => {
         console.warn('Missing guest sign-in button; start screen will remain visible.');
         return;
     }
+    */
 });

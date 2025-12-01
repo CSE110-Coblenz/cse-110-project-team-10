@@ -134,25 +134,62 @@
         </div>
         <div id="profile">
             <h2>Player Profile</h2>
+
             <div class="stat">
                 <div class="stat-label">Power</div>
-                <div class="bar"><div class="bar-fill" style="width: 80%; background-color: rgb(240, 60, 60);"></div></div>
+                <div class="bar">
+                    <div class="bar-fill" style="background-color: rgb(240, 60, 60);"></div>
+                </div>
             </div>
+
             <div class="stat">
                 <div class="stat-label">Technique</div>
-                <div class="bar"><div class="bar-fill" style="width: 60%; background-color: dodgerblue;"></div></div>
+                <div class="bar">
+                    <div class="bar-fill" style="background-color: dodgerblue;"></div>
+                </div>
             </div>
+
             <div class="stat">
                 <div class="stat-label">Accuracy</div>
-                <div class="bar"><div class="bar-fill" style="width: 90%; background-color: limegreen;"></div></div>
+                <div class="bar">
+                    <div class="bar-fill" style="background-color: limegreen;"></div>
+                </div>
             </div>
 
             <div class="stage-progress">
                 <h3>Stage Progress</h3>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 50%;"></div>
+                    <div class="progress-fill"></div>
                 </div>
             </div>
         </div>
+        <script type="module">
+            import { loadUserDB } from "/src/client/userdata.ts";
+
+            // logged in user name
+            const currentName = localStorage.getItem("currentUser");
+            const db = loadUserDB();
+            const user = db[currentName];
+
+            // user name
+            const title = document.querySelector("h1");
+            title.textContent = `Hi, ${user.name}!`;
+
+            // status
+            const powerPct = Math.min(user.stats.power * 10, 100);
+            const techPct = Math.min(user.stats.technique * 10, 100);
+            const accPct = Math.min(user.stats.accuracy * 10, 100);
+
+            // progress
+            const stagePct = Math.min((user.clearedStages / 6) * 100, 100);
+
+            // convert to html
+            document.querySelector("#profile .stat:nth-child(2) .bar-fill").style.width = powerPct + "%";
+            document.querySelector("#profile .stat:nth-child(3) .bar-fill").style.width = techPct + "%";
+            document.querySelector("#profile .stat:nth-child(4) .bar-fill").style.width = accPct + "%";
+
+            // Stage progress
+            document.querySelector(".stage-progress .progress-fill").style.width = stagePct + "%";
+        </script>
     </body>
 </html>
