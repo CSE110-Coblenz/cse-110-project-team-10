@@ -1,2 +1,8 @@
-# Lab2
-Fresh repository with main branch.
+# Physics Basketball!
+Creators:
+
+-Andrew Jeter
+
+-Aidan Lee
+
+-Taishi Aizawa
