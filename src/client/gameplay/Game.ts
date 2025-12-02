@@ -10,6 +10,7 @@ export class Game {
 	private ballPosition: Position = { x: 0, y: 0 }; 
 	private ballPrevPosition: Position = { x: 0, y: 0 };
 	private shotsTaken : number = 0;
+	private score : number = 0;
 	private inputController: inputController | null = null;
 	private isShooting: boolean = false;
 	private isGameOver: boolean = false;
@@ -75,15 +76,18 @@ export class Game {
 			this.shotStartTime = null; 
 			this.isGameOver = true; 
 			this.isShooting = false; 
+			this.score++;
 			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
             return;
 		} else if (calculateCollision(this.ballPosition)) {
 			console.log("Collision Detected with Backboard!");  
 			this.isShooting = false;
+			this.score--;
 			this.resetShot();
 		} else if (this.ballPosition.y < 0) {
 			console.log("Shot Finished"); 
 			this.isShooting = false;
+			this.score--; 
 			this.resetShot();
 		} else { 
 			requestAnimationFrame(() => this.gameLoop());
