@@ -1,195 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Kinematics Basketball Game</title>
-        <style>
-            body {
-                background-color: darkblue;
-                font-family: sans-serif;
-                text-align: center;
-                margin-top: 50px;
-            }
 
-            h1 {
-                color: white;
-                padding: 10;
-                font-size: 50px;
-                background-color: darkblue;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kinematics Basketball Game</title>
+    <style>
+        body {
+            background-color: darkblue;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
 
-            #stage-select{
-                /*background-color: darkcyan;*/
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 40px;
-                margin-top: 30px;
-                margin-bottom: 30px;
-                padding-top: 30px;
-                padding-bottom: 30px;
-            }
+        h1 {
+            color: white;
+            padding: 10;
+            font-size: 50px;
+            background-color: darkblue;
+        }
 
-            #stage-select button {
-                width: 150px;
-                height: 150px;
-                font-size: 20px;
-                font-weight: bold;
-                border-radius: 15px;
-                border: none;
-                background-color: white;
-                transition: transform 0.2s;
-            }
+        #stage-select {
+            /*background-color: darkcyan;*/
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
 
-            #stage-select button:hover {
-                transform: scale(1.2);
+        #stage-select button {
+            width: 150px;
+            height: 150px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 15px;
+            border: none;
+            background-color: white;
+            transition: transform 0.2s;
+        }
 
-            }
+        #stage-select button:hover {
+            transform: scale(1.2);
 
-            #profile {
-                background-color: rgba(255, 255, 255, 0.1);
-                border-radius: 15px;
-                padding: 20px;
-                width: 800px;
-                margin: 50px auto;
-                color: white;
-                text-align: left;
-            }
+        }
 
-            .stat {
-                margin-left: 15px;
-                margin-right: 15px;
-                margin-top: 5px;
-                margin-bottom: 5px;
-            }
+        #profile {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 800px;
+            margin: 50px auto;
+            color: white;
+            text-align: left;
+        }
 
-            .stat-label {
-                font-size: 18px;
-                margin-bottom: 5px;
-            }
+        .stat {
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
 
-            .bar {
-                width: 75%;
-                height: 15px;
-                background-color: rgba(255, 255, 255, 0.2);
-                border-radius: 10px;
-                overflow: hidden;
-                margin: 10px;
-            }
+        .stat-label {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
 
-            .bar-fill {
-                height: 100%;
-                background-color: limegreen;
-                width: 70%;
-                transition: width 0.3s;
-            }
+        .bar {
+            width: 75%;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px;
+        }
 
-            .stage-progress {
-                margin: 15px;
-            }
+        .bar-fill {
+            height: 100%;
+            background-color: limegreen;
+            width: 70%;
+            transition: width 0.3s;
+        }
 
-            .stage-progress h3 {
-                margin-bottom: 10px;
-                font-size: 20px;
-            }
+        .stage-progress {
+            margin: 15px;
+        }
 
-            .progress-bar {
-                height: 25px;
-                background-color: gray;
-                border-radius: 10px;
-                overflow: hidden;
-            }
+        .stage-progress h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
 
-            .progress-fill {
-                height: 100%;
-                background-color: gold;
-                width: 40%;
-                transition: width 0.3s;
-            }
+        .progress-bar {
+            height: 25px;
+            background-color: gray;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-        </style>
-    </head>
-    <body>
-        <h1>Hi, guest!</h1>
-        <div id="stage-select">
-            <a href="game1.html">
-                <button id="stage1">Stage1</button>
-            </a>
-            <a href="game2.html">
-                <button id="stage2">Stage2</button>
-            </a>
-            <a href="game3.html">
-                <button id="stage3">Stage3</button>
-            </a>
-            <a href="game4.html">
-                <button id="stage4">Stage4</button>
-            </a>
-            <a href="game5.html">
-                <button id="stage5">Stage5</button>
-            </a>
-            <a href="game6.html">
-                <button id="stage6">Stage6</button>
-            </a>
-        </div>
-        <div id="profile">
-            <h2>Player Profile</h2>
+        .progress-fill {
+            height: 100%;
+            background-color: gold;
+            width: 40%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
 
-            <div class="stat">
-                <div class="stat-label">Power</div>
-                <div class="bar">
-                    <div class="bar-fill" style="background-color: rgb(240, 60, 60);"></div>
-                </div>
-            </div>
+<body>
+    <h1>Hi, guest!</h1>
+    <div id="stage-select">
+        <a href="game.html?level=1">
+            <button id="stage1">Stage1</button>
+        </a>
+        <a href="game.html?level=2">
+            <button id="stage2">Stage2</button>
+        </a>
+        <a href="game.html?level=3">
+            <button id="stage3">Stage3</button>
+        </a>
+        <a href="game.html?level=4">
+            <button id="stage4">Stage4</button>
+        </a>
+        <a href="game.html?level=5">
+            <button id="stage5">Stage5</button>
+        </a>
+        <a href="game.html?level=6">
+            <button id="stage6">Stage6</button>
+        </a>
+    </div>
+    <div id="profile">
+        <h2>Player Profile</h2>
 
-            <div class="stat">
-                <div class="stat-label">Technique</div>
-                <div class="bar">
-                    <div class="bar-fill" style="background-color: dodgerblue;"></div>
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-label">Accuracy</div>
-                <div class="bar">
-                    <div class="bar-fill" style="background-color: limegreen;"></div>
-                </div>
-            </div>
-
-            <div class="stage-progress">
-                <h3>Stage Progress</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
+        <div class="stat">
+            <div class="stat-label">Power</div>
+            <div class="bar">
+                <div class="bar-fill" style="background-color: rgb(240, 60, 60);"></div>
             </div>
         </div>
-        <script type="module">
-            import { loadUserDB } from "/src/client/userdata.ts";
 
-            // logged in user name
-            const currentName = localStorage.getItem("currentUser");
-            const db = loadUserDB();
-            const user = db[currentName];
+        <div class="stat">
+            <div class="stat-label">Technique</div>
+            <div class="bar">
+                <div class="bar-fill" style="background-color: dodgerblue;"></div>
+            </div>
+        </div>
 
-            // user name
-            const title = document.querySelector("h1");
-            title.textContent = `Hi, ${user.name}!`;
+        <div class="stat">
+            <div class="stat-label">Accuracy</div>
+            <div class="bar">
+                <div class="bar-fill" style="background-color: limegreen;"></div>
+            </div>
+        </div>
 
-            // status
-            const powerPct = Math.min(user.stats.power * 10, 100);
-            const techPct = Math.min(user.stats.technique * 10, 100);
-            const accPct = Math.min(user.stats.accuracy * 10, 100);
+        <div class="stage-progress">
+            <h3>Stage Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { loadUserDB } from "/src/client/userdata.ts";
 
-            // progress
-            const stagePct = Math.min((user.clearedStages / 6) * 100, 100);
+        // logged in user name
+        const currentName = localStorage.getItem("currentUser");
+        const db = loadUserDB();
+        const user = db[currentName];
 
-            // convert to html
-            document.querySelector("#profile .stat:nth-child(2) .bar-fill").style.width = powerPct + "%";
-            document.querySelector("#profile .stat:nth-child(3) .bar-fill").style.width = techPct + "%";
-            document.querySelector("#profile .stat:nth-child(4) .bar-fill").style.width = accPct + "%";
+        // user name
+        const title = document.querySelector("h1");
+        title.textContent = `Hi, ${user.name}!`;
 
-            // Stage progress
-            document.querySelector(".stage-progress .progress-fill").style.width = stagePct + "%";
-        </script>
-    </body>
+        // status
+        const powerPct = Math.min(user.stats.power * 10, 100);
+        const techPct = Math.min(user.stats.technique * 10, 100);
+        const accPct = Math.min(user.stats.accuracy * 10, 100);
+
+        // progress
+        const stagePct = Math.min((user.clearedStages / 6) * 100, 100);
+
+        // convert to html
+        document.querySelector("#profile .stat:nth-child(2) .bar-fill").style.width = powerPct + "%";
+        document.querySelector("#profile .stat:nth-child(3) .bar-fill").style.width = techPct + "%";
+        document.querySelector("#profile .stat:nth-child(4) .bar-fill").style.width = accPct + "%";
+
+        // Stage progress
+        document.querySelector(".stage-progress .progress-fill").style.width = stagePct + "%";
+    </script>
+</body>
+
 </html>
