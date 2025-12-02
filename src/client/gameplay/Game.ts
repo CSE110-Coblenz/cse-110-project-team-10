@@ -8,9 +8,9 @@ export class Game {
 	private shotStartTime: number | null = null; 
 	private renderer: Renderer;
 	private ballPosition: Position = { x: 0, y: 0 }; 
-	private score: number = 0;
 	private ballPrevPosition: Position = { x: 0, y: 0 };
 	private shotsTaken : number = 0;
+	private score : number = 0;
 	private inputController: inputController | null = null;
 	private isShooting: boolean = false;
 	private isGameOver: boolean = false;
@@ -22,6 +22,10 @@ export class Game {
 	}
 
 	public startShot(params: ShotParams): void {
+		if (this.isShooting || this.isGameOver) {
+			return; 
+		}
+		this.isShooting = true;
 		this.currentShotParams = params; 
 		this.shotStartTime = Date.now(); 
 		this.shotsTaken++;
@@ -51,7 +55,7 @@ export class Game {
         this.isShooting = false;
         this.ballPosition = { x: 0, y: 0 };
         // Redraw ball at start, clear trajectory
-        this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
+        this.renderer.draw({ ball: this.ballPosition, trajectory: calculateTrajectoryPoints(this.currentShotParams? this.currentShotParams : { angle: 0, velocity: 0 }) });
     }
 
 	private gameLoop() {
@@ -69,22 +73,22 @@ export class Game {
 		
 		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition)) {
 			console.log("Basket Made!"); 
-			this.score++;
 			this.shotStartTime = null; 
 			this.isGameOver = true; 
 			this.isShooting = false; 
+			this.score++;
 			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
             return;
 		} else if (calculateCollision(this.ballPosition)) {
-			console.log("Collision Detected with Backboard!"); 
-			this.score--; 
-			this.currentShotParams = null;
-			this.shotStartTime = null; 
+			console.log("Collision Detected with Backboard!");  
+			this.isShooting = false;
+			this.score--;
+			this.resetShot();
 		} else if (this.ballPosition.y < 0) {
 			console.log("Shot Finished"); 
+			this.isShooting = false;
 			this.score--; 
-			this.currentShotParams = null;
-			this.shotStartTime = null; 
+			this.resetShot();
 		} else { 
 			requestAnimationFrame(() => this.gameLoop());
 		}
