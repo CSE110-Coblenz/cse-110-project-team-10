@@ -101,7 +101,11 @@ export class Game {
 	}	
 
 	private applyStageRewards(){
-		const name = localStorage.getItem("currentUser");
+		if (typeof window === "undefined" || !("localStorage" in window)) {
+			return;
+		}
+
+		const name = window.localStorage.getItem("currentUser");
 		if (!name) return;
 
 		const db = loadUserDB();
