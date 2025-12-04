@@ -2,6 +2,7 @@ import { ShotParams, Position } from './types.ts';
 import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
 import { inputController } from './Input';
+import { loadUserDB, updateUser } from "../userdata.ts";
 
 export class Game { 
 	private currentShotParams: ShotParams | null = null; 
@@ -77,6 +78,10 @@ export class Game {
 			this.isGameOver = true; 
 			this.isShooting = false; 
 			this.score++;
+
+			// Updating user status
+			this.applyStageRewards();
+
 			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
             return;
 		} else if (calculateCollision(this.ballPosition)) {
@@ -95,6 +100,34 @@ export class Game {
 
 	}	
 
-		
+	private applyStageRewards(){
+		const name = localStorage.getItem("currentUser");
+		if (!name) return;
+
+		const db = loadUserDB();
+		const user = db[name];
+		if (!user) return;
+
+		const url = new URL(window.location.href);
+		const stage = Number(url.searchParams.get("level")) || 1;
+
+		// Logic 
+		if (stage === 1) user.stats.power = Math.max(user.stats.power, 2);
+		if (stage === 2) user.stats.technique = Math.max(user.stats.technique, 2);
+		if (stage === 3) user.stats.power = Math.max(user.stats.power, 3);
+		if (stage === 4){
+			user.stats.power = Math.max(user.stats.power, 4);
+			user.stats.technique = Math.max(user.stats.technique, 3);
+		}
+		if (stage === 5) user.stats.power = Math.max(user.stats.power, 5);
+
+		user.stats.accuracy = Math.max(user.stats.accuracy, stage + 1); 
+		user.clearedStages = Math.max(user.clearedStages, stage);
+				
+		updateUser(user);
+				
+			
+
+	}
 	
 }	

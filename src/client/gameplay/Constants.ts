@@ -16,7 +16,8 @@ export interface StageConfig {
 
 type StageAwareWindow = Window & { stageConfig?: StageConfig };
 
-const DEFAULT_HOOP_POSITION: Position = { x: 28, y: 10 };
+//const DEFAULT_HOOP_POSITION: Position = { x: 28, y: 10 };
+const DEFAULT_HOOP_POSITION: Position = { x: 12, y: 3 };
 const DEFAULT_BACKBOARD_SIZE = { width: 0.2, height: 4 };
 const DEFAULT_RIM_LENGTH = 4;
 const DEFAULT_RIM_THICKNESS_PX = 5;

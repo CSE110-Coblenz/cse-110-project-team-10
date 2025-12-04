@@ -49,9 +49,11 @@ export function getOrCreateUser(name: string): UserData {
 
 // update user data
 export function updateUser(user: UserData) {
-	const db = loadUserDB();
-	db[user.name] = user;
-	saveUserDB(db);
+	const raw = localStorage.getItem("userDB");
+    const db = raw ? JSON.parse(raw) : {};
+
+    db[user.name] = user;
+    localStorage.setItem("userDB", JSON.stringify(db));
 }
 
 
