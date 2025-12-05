@@ -63,7 +63,7 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(true);
 		mockedCollision.mockReturnValue(false);
 
-		const game = new Game('canvas');
+		const game = new Game('canvas','1');
 		game.startShot({ angle: 73, velocity: 28 });
 
 			expect(readScore(game)).toBe(1);
@@ -80,7 +80,7 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(false);
 			mockedCollision.mockReturnValue(false);
 
-			const game = new Game('canvas');
+			const game = new Game('canvas','1');
 			game.startShot({ angle: 30, velocity: 10 });
 
 			expect(readScore(game)).toBe(-1);
@@ -97,7 +97,7 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(false);
 			mockedCollision.mockReturnValue(true);
 
-			const game = new Game('canvas');
+			const game = new Game('canvas','1');
 			game.startShot({ angle: 40, velocity: 12 });
 
 			expect(readScore(game)).toBe(-1);
