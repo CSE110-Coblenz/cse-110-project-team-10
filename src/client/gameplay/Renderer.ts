@@ -125,14 +125,6 @@ export class Renderer {
 				dash: [4, 2]
 			}));
 
-			// y coordinate label
-			gridLayer.add(new Konva.Text({
-				x: 2,
-				y: y + 2,
-				text: `${((height - y) / PIXELS_PER_METER).toFixed(1)}m`,
-				fontSize: 10,
-				fill: '#888'
-			}));
 		}
 		this.stage.add(gridLayer);
 		this.stage.add(this.layer);

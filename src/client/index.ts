@@ -28,7 +28,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if(document.getElementById("game-container")){
-	    const game = new Game('game-container');
+
+        // Get the level from URL
+        const url = new URL(window.location.href);
+        const level = url.searchParams.get("level") || "1";
+	    const game = new Game('game-container',level);
 
         const myInputController = new inputController(game, 'shoot-button');
 

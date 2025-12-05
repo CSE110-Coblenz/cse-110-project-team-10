@@ -19,14 +19,10 @@ export class Game {
 	private isGameOver: boolean = false;
 	private config: StageConfig;
 	
-	constructor(containerId: string) { 
+	constructor(containerId: string, level: string) { 
 		console.log("Game module initialized"); 
-
-		// Getting level number from URL
-		const url = new URL(window.location.href);
-		const level = url.searchParams.get("level") || "1";
-
-		this.config = levels[level];
+		
+		this.config = levels[level] ?? levels["1"];
 
 		this.renderer = new Renderer(containerId, this.config);
 		this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
