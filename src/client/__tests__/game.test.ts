@@ -26,6 +26,7 @@ vi.mock('../gameplay/Physics.ts', () => ({
 	calculateTrajectoryPoints: vi.fn(),
 	calculateBasketMade: vi.fn(),
 	calculateCollision: vi.fn(),
+	getAccuracyOffset: vi.fn(() => 0),
 }));
 
 const mockedPosition = vi.mocked(calculatePositionAtTime);
