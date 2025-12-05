@@ -63,11 +63,18 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(true);
 		mockedCollision.mockReturnValue(false);
 
-		const game = new Game('canvas');
+		const game = new Game('canvas','1');
 		game.startShot({ angle: 73, velocity: 28 });
 
 			expect(readScore(game)).toBe(1);
-			expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 });
+			expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 }, 
+				{
+					hoopPosition: expect.any(Object),
+					backboardSize: expect.any(Object),
+					rimLength: expect.any(Number),
+					rimThicknessPx: expect.any(Number)
+				}
+			);
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
@@ -80,7 +87,7 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(false);
 			mockedCollision.mockReturnValue(false);
 
-			const game = new Game('canvas');
+			const game = new Game('canvas','1');
 			game.startShot({ angle: 30, velocity: 10 });
 
 			expect(readScore(game)).toBe(-1);
@@ -97,11 +104,19 @@ describe('Game scoring', () => {
 			mockedBasket.mockReturnValue(false);
 			mockedCollision.mockReturnValue(true);
 
-			const game = new Game('canvas');
+			const game = new Game('canvas','1');
 			game.startShot({ angle: 40, velocity: 12 });
 
 			expect(readScore(game)).toBe(-1);
-			expect(mockedCollision).toHaveBeenCalledWith({ x: 5, y: 5 });
+			expect(mockedCollision).toHaveBeenCalledWith(
+				{ x: 5, y: 5 },
+				{
+					hoopPosition: expect.any(Object),
+					backboardSize: expect.any(Object),
+					rimLength: expect.any(Number),
+					rimThicknessPx: expect.any(Number)
+				}
+			);
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});

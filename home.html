@@ -177,12 +177,12 @@
         title.textContent = `Hi, ${user.name}!`;
 
         // status
-        const powerPct = Math.min(user.stats.power * 10, 100);
-        const techPct = Math.min(user.stats.technique * 10, 100);
-        const accPct = Math.min(user.stats.accuracy * 10, 100);
+        const powerPct = (user.stats.power / 6) * 100;
+        const techPct = (user.stats.technique / 3) * 100;
+        const accPct = (user.stats.accuracy / 6) * 100;
 
         // progress
-        const stagePct = Math.min((user.clearedStages / 6) * 100, 100);
+        const progressPct = (user.clearedStages / 6) * 100;
 
         // convert to html
         document.querySelector("#profile .stat:nth-child(2) .bar-fill").style.width = powerPct + "%";
@@ -190,7 +190,12 @@
         document.querySelector("#profile .stat:nth-child(4) .bar-fill").style.width = accPct + "%";
 
         // Stage progress
-        document.querySelector(".stage-progress .progress-fill").style.width = stagePct + "%";
+        document.querySelector(".stage-progress .progress-fill").style.width = progressPct + "%";
+
+        console.log("Stages Cleared: %d",user.clearedStages);
+        console.log("Power: %d",user.stats.power);
+        console.log("Technique: %d",user.stats.technique);
+        console.log("Accuracy: %d",user.stats.accuracy);
     </script>
 </body>
 

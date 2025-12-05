@@ -1,5 +1,5 @@
 import { Position, ShotParams } from './types.ts'; 
-import { HOOP_POSITION_M, RIM_LENGTH_M, BALL_RADIUS_M, BACKBOARD_SIZE_M, RIM_THICKNESS_PX } from './Constants.ts';
+import { HOOP_POSITION_M, RIM_LENGTH_M, BALL_RADIUS_M, BACKBOARD_SIZE_M, RIM_THICKNESS_PX, PIXELS_PER_METER, StageConfig } from './Constants.ts';
 
 const gravity = 9.81 *1.5;
 
@@ -36,43 +36,54 @@ export function calculateTrajectoryPoints(params: ShotParams) {
   return pathPoints;
 }
 
-export function calculateCollision(ballPos: Position): boolean {
+export function calculateCollision(ballPos: Position, cfg: StageConfig): boolean {
 
-  const ballLeft = ballPos.x - BALL_RADIUS_M;
-  const ballRight = ballPos.x + BALL_RADIUS_M;
-  const ballTop = ballPos.y + BALL_RADIUS_M;
-  const ballBottom = ballPos.y - BALL_RADIUS_M;
+	const hoop = cfg.hoopPosition!;
+	const board = cfg.backboardSize!;
+
+	const ballLeft = ballPos.x - BALL_RADIUS_M;
+	const ballRight = ballPos.x + BALL_RADIUS_M;
+	const ballTop = ballPos.y + BALL_RADIUS_M;
+	const ballBottom = ballPos.y - BALL_RADIUS_M;
 
 
-  const boardLeft = HOOP_POSITION_M.x;
-  const boardRight = HOOP_POSITION_M.x + BACKBOARD_SIZE_M.width;
-  
-  const boardTop = HOOP_POSITION_M.y + (BACKBOARD_SIZE_M.height / 2);
-  const boardBottom = HOOP_POSITION_M.y - (BACKBOARD_SIZE_M.height / 2);
+	const boardLeft = hoop.x;
+	const boardRight = hoop.x + board.width;
+	const boardTop = hoop.y + board.height / 2;
+	const boardBottom = hoop.y - board.height / 2;
 
-  const isOverlappingX = ballRight > boardLeft && ballLeft < boardRight;
-  const isOverlappingY = ballTop > boardBottom && ballBottom < boardTop;
-  
-  return isOverlappingX && isOverlappingY;
+	const isOverlappingX = ballRight > boardLeft && ballLeft < boardRight;
+	const isOverlappingY = ballTop > boardBottom && ballBottom < boardTop;
+	
+	return isOverlappingX && isOverlappingY;
 }
 
-export function calculateBasketMade(ballPos: Position, ballPrevPosition: Position): boolean {
-  if (ballPrevPosition.y > ballPos.y) {
-    const ballLeft = ballPos.x - BALL_RADIUS_M;
-      const ballRight = ballPos.x + BALL_RADIUS_M;
-      const ballTop = ballPos.y + BALL_RADIUS_M;
-      const ballBottom = ballPos.y - BALL_RADIUS_M;
+export function calculateBasketMade(ballPos: Position, ballPrevPosition: Position, cfg: StageConfig): boolean {
+	if (ballPrevPosition.y <= ballPos.y) return false;
 
-      const rimTop = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) + (RIM_THICKNESS_PX / 2);
-      const rimBottom = (HOOP_POSITION_M.y - BACKBOARD_SIZE_M.height/2) - (RIM_THICKNESS_PX / 2);
-      const rimLeft = HOOP_POSITION_M.x - RIM_LENGTH_M;
-      const rimRight = HOOP_POSITION_M.x + BACKBOARD_SIZE_M.width;
+	const hoop = cfg.hoopPosition!;
+	const rimLength = cfg.rimLength!;
+	const rimThickness = cfg.rimThicknessPx! / PIXELS_PER_METER;
 
-      const isWithinRimX = ballLeft > rimLeft && ballRight < rimRight;
-      const isBelowRimY = ballTop < rimTop && ballBottom > rimBottom;
+	const ballLeft = ballPos.x - BALL_RADIUS_M;
+	const ballRight = ballPos.x + BALL_RADIUS_M;
+	const ballTop = ballPos.y + BALL_RADIUS_M;
+	const ballBottom = ballPos.y - BALL_RADIUS_M;
 
-      return isWithinRimX && isBelowRimY;
-  }
-  return false;
+
+	const rimTop = hoop.y + (RIM_THICKNESS_PX / 2);
+    const rimBottom = hoop.y - (RIM_THICKNESS_PX / 2);
+    const rimLeft = hoop.x - RIM_LENGTH_M;
+    const rimRight = hoop.x + BACKBOARD_SIZE_M.width;
+
+    const isWithinRimX = ballLeft > rimLeft && ballRight < rimRight;
+    const isBelowRimY = ballTop < rimTop && ballBottom > rimBottom;
+
+	if(!isWithinRimX || !isBelowRimY) return false;
+	//console.log("ballX: %d, ballY: %d",ballPos.x*100, ballPos.y*100);
+	//console.log("rimX: %d, rimY: %d",hoop.x*100, hoop.y*100);
+    return isWithinRimX && isBelowRimY;
+
+	
 }
 

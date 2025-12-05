@@ -2,6 +2,9 @@ import { ShotParams, Position } from './types.ts';
 import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
 import { inputController } from './Input';
+import { loadUserDB, updateUser } from "../userdata.ts";
+import { levels } from "../levels.ts";
+import { StageConfig } from './Constants.ts';
 
 export class Game { 
 	private currentShotParams: ShotParams | null = null; 
@@ -14,10 +17,14 @@ export class Game {
 	private inputController: inputController | null = null;
 	private isShooting: boolean = false;
 	private isGameOver: boolean = false;
+	private config: StageConfig;
 	
-	constructor(containerId: string) { 
+	constructor(containerId: string, level: string) { 
 		console.log("Game module initialized"); 
-		this.renderer = new Renderer(containerId); 
+		
+		this.config = levels[level] ?? levels["1"];
+
+		this.renderer = new Renderer(containerId, this.config);
 		this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
 	}
 
@@ -71,15 +78,19 @@ export class Game {
 		this.renderer.draw({ ball: this.ballPosition, trajectory: trajectoryPreview });	
 		
 		
-		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition)) {
+		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition, this.config)) {
 			console.log("Basket Made!"); 
 			this.shotStartTime = null; 
 			this.isGameOver = true; 
 			this.isShooting = false; 
 			this.score++;
+
+			// Updating user status
+			this.applyStageRewards();
+
 			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
             return;
-		} else if (calculateCollision(this.ballPosition)) {
+		} else if (calculateCollision(this.ballPosition, this.config)) {
 			console.log("Collision Detected with Backboard!");  
 			this.isShooting = false;
 			this.score--;
@@ -95,6 +106,41 @@ export class Game {
 
 	}	
 
-		
+	private applyStageRewards(){
+		if (typeof window === "undefined" || !("localStorage" in window)) {
+			return;
+		}
+
+		const name = window.localStorage.getItem("currentUser");
+		if (!name) return;
+
+		const db = loadUserDB();
+		const user = db[name];
+		if (!user) return;
+
+		const url = new URL(window.location.href);
+		const stage = Number(url.searchParams.get("level")) || 1;
+
+		// Logic 
+		if (stage === 1) user.stats.power = Math.max(user.stats.power, 2);
+		if (stage === 2) {
+			user.stats.power = Math.max(user.stats.power, 3);
+			user.stats.technique = Math.max(user.stats.technique, 2);
+		}
+		if (stage === 3) user.stats.power = Math.max(user.stats.power, 4);
+		if (stage === 4){
+			user.stats.power = Math.max(user.stats.power, 5);
+			user.stats.technique = Math.max(user.stats.technique, 3);
+		}
+		if (stage === 5) user.stats.power = Math.max(user.stats.power, 6);
+
+		user.stats.accuracy = Math.max(user.stats.accuracy, stage + 1); 
+		user.clearedStages = Math.max(user.clearedStages, stage);
+				
+		updateUser(user);
+				
+			
+
+	}
 	
 }	
