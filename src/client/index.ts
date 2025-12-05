@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
             velocityInput.addEventListener("keydown", e => e.preventDefault());
 
             // Power limit
-            const powerBonus = [0, 2, 5, 8, 13, 18]; 
+            const powerBonus = [0, 2, 5, 8, 12, 16, 18]; 
             const maxVelocity = 12 + powerBonus[power];
             velocityInput.max = String(maxVelocity);
 

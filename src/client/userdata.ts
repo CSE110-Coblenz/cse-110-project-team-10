@@ -30,7 +30,7 @@ export function saveUserDB(db: Record<string, UserData>) {
 export function getOrCreateUser(name: string): UserData {
 	const db = loadUserDB();
 
-	if (db[name]) {
+	if (db[name] && db[name].name != "Guest") {
 		return db[name];
 	}
 

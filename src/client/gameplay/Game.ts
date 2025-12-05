@@ -3,6 +3,8 @@ import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calcu
 import { Renderer, GameState } from './Renderer';
 import { inputController } from './Input';
 import { loadUserDB, updateUser } from "../userdata.ts";
+import { levels } from "../levels.ts";
+import { StageConfig } from './Constants.ts';
 
 export class Game { 
 	private currentShotParams: ShotParams | null = null; 
@@ -15,10 +17,18 @@ export class Game {
 	private inputController: inputController | null = null;
 	private isShooting: boolean = false;
 	private isGameOver: boolean = false;
+	private config: StageConfig;
 	
 	constructor(containerId: string) { 
 		console.log("Game module initialized"); 
-		this.renderer = new Renderer(containerId); 
+
+		// Getting level number from URL
+		const url = new URL(window.location.href);
+		const level = url.searchParams.get("level") || "1";
+
+		this.config = levels[level];
+
+		this.renderer = new Renderer(containerId, this.config);
 		this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
 	}
 
@@ -72,7 +82,7 @@ export class Game {
 		this.renderer.draw({ ball: this.ballPosition, trajectory: trajectoryPreview });	
 		
 		
-		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition)) {
+		if (calculateBasketMade(this.ballPosition, this.ballPrevPosition, this.config)) {
 			console.log("Basket Made!"); 
 			this.shotStartTime = null; 
 			this.isGameOver = true; 
@@ -84,7 +94,7 @@ export class Game {
 
 			this.inputController?.showWinScreen(this.shotsTaken, this.currentShotParams);
             return;
-		} else if (calculateCollision(this.ballPosition)) {
+		} else if (calculateCollision(this.ballPosition, this.config)) {
 			console.log("Collision Detected with Backboard!");  
 			this.isShooting = false;
 			this.score--;
@@ -117,13 +127,16 @@ export class Game {
 
 		// Logic 
 		if (stage === 1) user.stats.power = Math.max(user.stats.power, 2);
-		if (stage === 2) user.stats.technique = Math.max(user.stats.technique, 2);
-		if (stage === 3) user.stats.power = Math.max(user.stats.power, 3);
+		if (stage === 2) {
+			user.stats.power = Math.max(user.stats.power, 3);
+			user.stats.technique = Math.max(user.stats.technique, 2);
+		}
+		if (stage === 3) user.stats.power = Math.max(user.stats.power, 4);
 		if (stage === 4){
-			user.stats.power = Math.max(user.stats.power, 4);
+			user.stats.power = Math.max(user.stats.power, 5);
 			user.stats.technique = Math.max(user.stats.technique, 3);
 		}
-		if (stage === 5) user.stats.power = Math.max(user.stats.power, 5);
+		if (stage === 5) user.stats.power = Math.max(user.stats.power, 6);
 
 		user.stats.accuracy = Math.max(user.stats.accuracy, stage + 1); 
 		user.clearedStages = Math.max(user.clearedStages, stage);
