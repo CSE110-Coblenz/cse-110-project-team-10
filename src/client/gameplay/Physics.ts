@@ -71,8 +71,8 @@ export function calculateBasketMade(ballPos: Position, ballPrevPosition: Positio
 	const ballBottom = ballPos.y - BALL_RADIUS_M;
 
 
-	const rimTop = (hoop.y - BACKBOARD_SIZE_M.height/2) + (RIM_THICKNESS_PX / 2);
-    const rimBottom = (hoop.y - BACKBOARD_SIZE_M.height / 2) - (RIM_THICKNESS_PX / 2);
+	const rimTop = hoop.y + (RIM_THICKNESS_PX / 2);
+    const rimBottom = hoop.y - (RIM_THICKNESS_PX / 2);
     const rimLeft = hoop.x - RIM_LENGTH_M;
     const rimRight = hoop.x + BACKBOARD_SIZE_M.width;
 
