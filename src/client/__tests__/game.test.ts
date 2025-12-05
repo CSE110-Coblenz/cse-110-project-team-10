@@ -67,7 +67,14 @@ describe('Game scoring', () => {
 		game.startShot({ angle: 73, velocity: 28 });
 
 			expect(readScore(game)).toBe(1);
-			expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 });
+			expect(mockedBasket).toHaveBeenCalledWith({ x: 1, y: 3 }, { x: 0, y: 0 }, 
+				{
+					hoopPosition: expect.any(Object),
+					backboardSize: expect.any(Object),
+					rimLength: expect.any(Number),
+					rimThicknessPx: expect.any(Number)
+				}
+			);
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
@@ -101,7 +108,15 @@ describe('Game scoring', () => {
 			game.startShot({ angle: 40, velocity: 12 });
 
 			expect(readScore(game)).toBe(-1);
-			expect(mockedCollision).toHaveBeenCalledWith({ x: 5, y: 5 });
+			expect(mockedCollision).toHaveBeenCalledWith(
+				{ x: 5, y: 5 },
+				{
+					hoopPosition: expect.any(Object),
+					backboardSize: expect.any(Object),
+					rimLength: expect.any(Number),
+					rimThicknessPx: expect.any(Number)
+				}
+			);
 			expect(rafMocks.requestAnimationFrame).not.toHaveBeenCalled();
 			dateSpy.mockRestore();
 		});
