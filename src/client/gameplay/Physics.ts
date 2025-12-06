@@ -87,3 +87,10 @@ export function calculateBasketMade(ballPos: Position, ballPrevPosition: Positio
 	
 }
 
+export function getAccuracyOffset(accuracy: number): number {
+    // accuracy 1 → ±20%
+    // accuracy 6 → ±0%
+    const maxPercent = (6 - accuracy) * 0.04;
+    return (Math.random() * 2 - 1) * maxPercent;
+}
+

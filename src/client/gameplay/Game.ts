@@ -1,5 +1,5 @@
 import { ShotParams, Position } from './types.ts';
-import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints } from './Physics.ts'; 
+import { calculateBasketMade, calculateCollision, calculatePositionAtTime, calculateTrajectoryPoints, getAccuracyOffset } from './Physics.ts'; 
 import { Renderer, GameState } from './Renderer';
 import { inputController } from './Input';
 import { loadUserDB, updateUser } from "../userdata.ts";
@@ -18,6 +18,7 @@ export class Game {
 	private isShooting: boolean = false;
 	private isGameOver: boolean = false;
 	private config: StageConfig;
+	private accuracy: number = 1;
 	
 	constructor(containerId: string, level: string) { 
 		console.log("Game module initialized"); 
@@ -25,6 +26,16 @@ export class Game {
 		this.config = levels[level] ?? levels["1"];
 
 		this.renderer = new Renderer(containerId, this.config);
+
+		if (typeof window !== "undefined" && "localStorage" in window) {
+			const name = window.localStorage.getItem("currentUser");
+			if (name) {
+				const db = loadUserDB();
+				const user = db[name];
+				if (user) this.accuracy = user.stats.accuracy;
+			}
+		}
+
 		this.renderer.draw({ ball: this.ballPosition, trajectory: [] });
 	}
 
@@ -32,8 +43,16 @@ export class Game {
 		if (this.isShooting || this.isGameOver) {
 			return; 
 		}
+
+		const acc = this.accuracy;
+
+		let angle = params.angle;
+	    let velocity = params.velocity;
+		angle += angle * getAccuracyOffset(this.accuracy);
+	    velocity += velocity * getAccuracyOffset(this.accuracy);
+
 		this.isShooting = true;
-		this.currentShotParams = params; 
+		this.currentShotParams = { angle, velocity };
 		this.shotStartTime = Date.now(); 
 		this.shotsTaken++;
 		this.inputController?.updateShotsDisplay(this.shotsTaken);
